@@ -1,3 +1,4 @@
+import 'package:blood_donation/view/Profile_screen/personel_information.dart';
 import 'package:blood_donation/view/auth%20_screens.dart/login_screen.dart';
 import 'package:blood_donation/widgets/redContainer.dart';
 import 'package:blood_donation/widgets/reusable_button.dart';
@@ -70,7 +71,17 @@ class _SignupScreenState extends State<SignupScreen> {
             left: width * 0.05,
             right: width * 0.05,
             top: height * 0.55,
-            child: ReusableButton(label: 'Sign up'),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PersonelInformation(),
+                  ),
+                );
+              },
+              child: ReusableButton(label: 'Sign up'),
+            ),
           ),
 
           Positioned(

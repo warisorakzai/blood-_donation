@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1027005200040",
+    "project_id": "fitnex-5186a",
+    "storage_bucket": "fitnex-5186a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027005200040:android:c5ce1b26ba758186bb349d",
+        "android_client_info": {
+          "package_name": "com.example.blood_donation"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCw3b-LCEnawMmjtAC_oA8u6Y_1rcMprvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

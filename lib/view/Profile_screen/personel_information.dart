@@ -56,11 +56,19 @@ class _PersonelInformationState extends State<PersonelInformation> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    // final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     TextEditingController nameController = TextEditingController();
     return Scaffold(
-      appBar: AppBar(title: Icon(Icons.arrow_back_ios_new_outlined)),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.arrow_back_ios_new_outlined),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

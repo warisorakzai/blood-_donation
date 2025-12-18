@@ -28,7 +28,12 @@ class _BasicInformationState extends State<BasicInformation> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
 
-        title: Icon(Icons.arrow_back_ios_new_outlined),
+        title: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(Icons.arrow_back_ios_new_outlined),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

@@ -1,5 +1,7 @@
 import 'package:blood_donation/Models/user_model.dart';
 import 'package:blood_donation/core/services/user_Service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class UserProvider extends ChangeNotifier {
@@ -95,4 +97,14 @@ class UserProvider extends ChangeNotifier {
     _user = null;
     notifyListeners();
   }
+  Future<void> updateProfileImage(String imageUrl) async {
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+
+  await FirebaseFirestore.instance
+      .collection('users')
+      .doc(uid)
+      .update({'profileImage': imageUrl});
+
+  await loadCurrentUser();
+}
 }

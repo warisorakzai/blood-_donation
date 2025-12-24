@@ -1,4 +1,3 @@
-import 'package:blood_donation/core/utills/Svg_icon.dart';
 import 'package:blood_donation/view/auth%20_screens.dart/onboarding_Screen.dart';
 import 'package:flutter/material.dart';
 

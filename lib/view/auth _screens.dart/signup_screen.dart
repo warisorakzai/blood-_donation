@@ -4,8 +4,6 @@ import 'package:blood_donation/view/auth%20_screens.dart/login_screen.dart';
 import 'package:blood_donation/widgets/custom_text_field.dart';
 import 'package:blood_donation/widgets/redContainer.dart';
 import 'package:blood_donation/widgets/reusable_button.dart';
-import 'package:blood_donation/widgets/reusable_email.dart';
-import 'package:blood_donation/widgets/reusable_password.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

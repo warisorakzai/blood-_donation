@@ -7,7 +7,8 @@ class UserModel {
   final String? country;
   final String? bloodGroup;
   final bool isDonor;
-  final bool profileCompleted; // ✅ ADD THIS
+  final bool profileCompleted;
+  final String? profileImage;
   final DateTime createdAt;
 
   UserModel({
@@ -19,9 +20,39 @@ class UserModel {
     this.country,
     this.bloodGroup,
     this.isDonor = false,
-    this.profileCompleted = false, // ✅ DEFAULT
+    this.profileCompleted = false,
+    this.profileImage,
     required this.createdAt,
   });
+
+  /// 🔁 COPY WITH
+  UserModel copyWith({
+    String? uid,
+    String? email,
+    String? name,
+    String? phone,
+    String? city,
+    String? country,
+    String? bloodGroup,
+    bool? isDonor,
+    bool? profileCompleted,
+    String? profileImage,
+    DateTime? createdAt,
+  }) {
+    return UserModel(
+      uid: uid ?? this.uid,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      city: city ?? this.city,
+      country: country ?? this.country,
+      bloodGroup: bloodGroup ?? this.bloodGroup,
+      isDonor: isDonor ?? this.isDonor,
+      profileCompleted: profileCompleted ?? this.profileCompleted,
+      profileImage: profileImage ?? this.profileImage,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -33,22 +64,24 @@ class UserModel {
       'country': country,
       'bloodGroup': bloodGroup,
       'isDonor': isDonor,
-      'profileCompleted': profileCompleted, // ✅ SAVE
+      'profileCompleted': profileCompleted,
+      'profileImage': profileImage,
       'createdAt': createdAt.toIso8601String(),
     };
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      uid: map['uid'] as String,
-      email: map['email'] as String,
-      name: map['name'] as String?,
-      phone: map['phone'] as String?,
-      city: map['city'] as String?,
-      country: map['country'] as String?,
-      bloodGroup: map['bloodGroup'] as String?,
+      uid: map['uid'],
+      email: map['email'],
+      name: map['name'],
+      phone: map['phone'],
+      city: map['city'],
+      country: map['country'],
+      bloodGroup: map['bloodGroup'],
       isDonor: map['isDonor'] ?? false,
-      profileCompleted: map['profileCompleted'] ?? false, // ✅ READ
+      profileCompleted: map['profileCompleted'] ?? false,
+      profileImage: map['profileImage'],
       createdAt: DateTime.parse(map['createdAt']),
     );
   }

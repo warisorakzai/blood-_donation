@@ -1,4 +1,3 @@
-import 'package:blood_donation/view/Home_screen.dart';
 import 'package:blood_donation/view/auth%20_screens.dart/signup_screen.dart';
 import 'package:flutter/material.dart';
 

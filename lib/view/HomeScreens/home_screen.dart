@@ -1,13 +1,18 @@
+import 'dart:io';
+
 import 'package:blood_donation/Provider/auth_provider.dart';
+import 'package:blood_donation/Provider/storage_provider.dart';
 import 'package:blood_donation/Provider/user_provider.dart';
 import 'package:blood_donation/view/auth%20_screens.dart/login_screen.dart';
 import 'package:blood_donation/view/bloodrequest_screen.dart';
 import 'package:blood_donation/widgets/contribution.dart';
 import 'package:blood_donation/widgets/custom_text_field.dart';
+import 'package:blood_donation/widgets/image_picker.dart';
 import 'package:blood_donation/widgets/reusable_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -49,7 +54,70 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               children: [
                 SizedBox(width: 20),
-                CircleAvatar(radius: 30.h),
+                Consumer2<StorageProvider, UserProvider>(
+                  // used for the 2 providers
+                  builder: (context, storage, userProvider, child) {
+                    final imageUrl = userProvider.user?.profileImage;
+                    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+                    return InkWell(
+                      onTap: () async {
+                        final file = await pickImage();
+                        if (file == null) return;
+
+                        final success = await storage.uploadImage(uid, file);
+                        if (success) {
+                          await userProvider.loadCurrentUser(); //  refresh user
+                        }
+                      },
+                      onLongPress: imageUrl == null
+                          ? null
+                          : () async {
+                              final confirm = await showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  title: const Text('Remove Profile Image'),
+                                  content: const Text(
+                                    'Do you want to delete your profile image?',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, false),
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.pop(context, true),
+                                      child: const Text(
+                                        'Delete',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+
+                              if (confirm == true) {
+                                final success = await storage.deleteImage(uid);
+                                if (success) {
+                                  await userProvider.loadCurrentUser();
+                                }
+                              }
+                            },
+                      child: CircleAvatar(
+                        radius: 30.h,
+                        backgroundImage: imageUrl != null
+                            ? NetworkImage(imageUrl)
+                            : null,
+                        child: imageUrl == null
+                            ? const Icon(Icons.person)
+                            : null,
+                      ),
+                    );
+                  },
+                ),
+
                 SizedBox(width: 10),
                 Column(
                   children: [
@@ -384,7 +452,7 @@ class ActivityCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           /// ICON IMAGE
-          Container(
+          SizedBox(
             height: 44,
             width: 44,
             // padding: const EdgeInsets.all(8),
@@ -426,6 +494,7 @@ class ContributionCard extends StatelessWidget {
   final Color textColor;
 
   const ContributionCard({
+    super.key,
     required this.number,
     required this.title,
     required this.bgColor,

@@ -1,3 +1,4 @@
+import 'package:blood_donation/view/profiledetails_screens/profile_details_scrren.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -42,22 +43,35 @@ class PostDetailsScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             /// Info Card
-            Container(
-              padding: EdgeInsets.all(16.h),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6.sp)],
-              ),
-              child: Column(
-                children: [
-                  infoRow(Icons.person, 'Contact Person', 'Person Name'),
-                  infoRow(Icons.call, 'Mobile Number', '+88 011122233344'),
-                  infoRow(Icons.bloodtype, 'How many Bag(s)', '3 Bags'),
-                  infoRow(Icons.public, 'Country', 'Bangladesh'),
-                  infoRow(Icons.location_city, 'City', 'Dhaka'),
-                  infoRow(Icons.local_hospital, 'Hospital', 'Nur Hospital'),
-                ],
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileDetailsScreen(),
+                  ),
+                );
+              },
+
+              child: Container(
+                padding: EdgeInsets.all(16.h),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(color: Colors.black12, blurRadius: 6.sp),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    infoRow(Icons.person, 'Contact Person', 'Person Name'),
+                    infoRow(Icons.call, 'Mobile Number', '+88 011122233344'),
+                    infoRow(Icons.bloodtype, 'How many Bag(s)', '3 Bags'),
+                    infoRow(Icons.public, 'Country', 'Bangladesh'),
+                    infoRow(Icons.location_city, 'City', 'Dhaka'),
+                    infoRow(Icons.local_hospital, 'Hospital', 'Nur Hospital'),
+                  ],
+                ),
               ),
             ),
 

@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:blood_donation/view/HomeScreens/home_screen.dart';
-import 'package:blood_donation/view/Profile_screen/personel_information.dart';
 import 'package:blood_donation/view/bottmNavigation.dart';
 import 'package:blood_donation/widgets/reusable_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as BorderType;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 

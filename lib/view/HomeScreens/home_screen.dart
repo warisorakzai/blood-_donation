@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:blood_donation/Models/bloodrequest_model.dart';
 import 'package:blood_donation/Provider/auth_provider.dart';
+import 'package:blood_donation/Provider/bloodRequest_provider.dart';
 import 'package:blood_donation/Provider/storage_provider.dart';
 import 'package:blood_donation/Provider/user_provider.dart';
 import 'package:blood_donation/view/auth%20_screens.dart/login_screen.dart';
@@ -186,6 +188,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 hintText: 'Search blood',
               ),
             ),
+            Consumer<BloodrequestProvider>(
+              builder: (context, provider, _) {
+                return StreamBuilder(
+                  stream: provider.requests,
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const CircularProgressIndicator();
+                    }
+
+                    final requests = snapshot.data!;
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: requests.length,
+                      itemBuilder: (context, index) {
+                        final req = requests[index];
+
+                        return Card(
+                          child: ListTile(
+                            title: Text(req.title),
+                            subtitle: Text("${req.bloodGroup} • ${req.city}"),
+                            trailing: Text("${req.bags} Bags"),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
             homeHeader(tilte: 'Activity As'),
 
             GridView.count(
@@ -226,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 20.h),
-              itemCount: bloodGroups.length,
+              itemCount: 2,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 mainAxisSpacing: 12,
@@ -288,8 +320,42 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             homeHeader(tilte: 'Recently Viewed'),
-            homeContainer(bloodGroups: bloodGroups),
-            homeContainer(bloodGroups: bloodGroups),
+            Consumer<BloodrequestProvider>(
+              builder: (context, provider, _) {
+                return StreamBuilder<List<BloodRequestModel>>(
+                  stream: provider.requests,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text("No requests found"));
+                    }
+                    final requests = snapshot.data!;
+
+                    return ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+
+                      shrinkWrap: true,
+                      itemCount: requests.length,
+                      itemBuilder: (context, index) {
+                        final req = requests[index];
+
+                        return homeContainer(
+                          bloodGroup: req.bloodGroup,
+                          title: req.title,
+                          hospital: req.hospital,
+                          date: req.createdAt.toLocal().toString().split(
+                            ' ',
+                          )[0],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
             homeHeader(tilte: 'Our Contribution'),
             GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
@@ -321,9 +387,18 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class homeContainer extends StatelessWidget {
-  const homeContainer({super.key, required this.bloodGroups});
+  const homeContainer({
+    super.key,
+    required this.bloodGroup,
+    required this.title,
+    required this.hospital,
+    required this.date,
+  });
 
-  final List<String> bloodGroups;
+  final String bloodGroup;
+  final String title;
+  final String hospital;
+  final String date;
 
   @override
   Widget build(BuildContext context) {
@@ -331,70 +406,74 @@ class homeContainer extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 5.h),
       child: Container(
         height: 130.h,
-        // width: 400.w,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Column(
+        child: Row(
           children: [
-            Row(
-              children: [
-                Container(
-                  height: 55.h,
-                  width: 120.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.red),
+            SizedBox(width: 10.w),
 
-                    // borderRadius: BorderRadius.circular(20),
+            /// BLOOD DROP
+            Container(
+              height: 55.h,
+              width: 55.h,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.red),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset('assets/images/drop.png', height: 35.h),
+                  Text(
+                    bloodGroup,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      color: Colors.white,
+                    ),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Image.asset('assets/images/drop.png', height: 35.h),
-                          Text(
-                            bloodGroups.first,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                ],
+              ),
+            ),
+
+            SizedBox(width: 15.w),
+
+            /// DETAILS
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                SizedBox(height: 6.h),
+                Row(
                   children: [
-                    SizedBox(height: 20.h),
-
-                    Text(
-                      'Emergency B+ Blood Needed',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    const Icon(
+                      Icons.local_hospital,
+                      color: Colors.red,
+                      size: 16,
                     ),
-                    SizedBox(height: 10.h),
-
-                    Row(
-                      children: [
-                        Icon(Icons.bus_alert_sharp, color: Colors.red),
-                        Text('Hospitol Name'),
-                      ],
+                    SizedBox(width: 5.w),
+                    Text(hospital, style: TextStyle(fontSize: 15.sp)),
+                  ],
+                ),
+                SizedBox(height: 6.h),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.timer_outlined,
+                      color: Colors.red,
+                      size: 16,
                     ),
-                    SizedBox(height: 10.h),
-
-                    Row(
-                      children: [
-                        Icon(Icons.timer_outlined, color: Colors.red),
-                        Text('12 Feb 2025'),
-                      ],
-                    ),
+                    SizedBox(width: 5.w),
+                    Text(date),
                   ],
                 ),
               ],

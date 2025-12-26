@@ -6,118 +6,141 @@ class ProfileDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
         backgroundColor: Colors.white,
-        leading: const BackButton(color: Colors.black),
-        title: const Text(
-          "Profile Details",
-          style: TextStyle(color: Colors.black),
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.white,
+          leading: const BackButton(color: Colors.black),
+          title: const Text(
+            "Profile Details",
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
         ),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 10.h),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 10.h),
 
-            /// PROFILE IMAGE
-            const CircleAvatar(
-              radius: 45,
-              backgroundImage: NetworkImage("https://i.pravatar.cc/300"),
-            ),
-
-            SizedBox(height: 12.h),
-
-            /// NAME
-            const Text(
-              "Cameron Williamson",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-            ),
-
-            SizedBox(height: 4.h),
-
-            /// BLOOD GROUP
-            const Text("A+ Blood", style: TextStyle(color: Colors.grey)),
-
-            SizedBox(height: 16.h),
-
-            /// CHAT & CALL BUTTONS
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _actionButton(
-                  text: "Chat Now",
-                  color: Colors.red,
-                  onTap: () {},
-                ),
-                SizedBox(width: 12.w),
-                _outlineButton(text: "Call", onTap: () {}),
-              ],
-            ),
-
-            SizedBox(height: 20.h),
-
-            /// TABS
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _tabItem(title: "About", isSelected: true),
-                SizedBox(width: 30.w),
-                _tabItem(title: "Create Ads", isSelected: false),
-              ],
-            ),
-
-            SizedBox(height: 16.h),
-
-            /// INFO CARD
-            _infoCard(),
-
-            SizedBox(height: 16.h),
-
-            /// ABOUT USER
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "About User",
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+              /// PROFILE IMAGE
+              const CircleAvatar(
+                radius: 45,
+                backgroundImage: NetworkImage("https://i.pravatar.cc/300"),
               ),
-            ),
 
-            SizedBox(height: 8.h),
+              SizedBox(height: 12.h),
 
-            const Text(
-              "Libero tempore, cum soluta nobis est eligendi optio "
-              "cumque nihil impedit quo minus id quod maxime placeat "
-              "facere possimus.",
-              style: TextStyle(color: Colors.grey),
-            ),
+              /// NAME
+              const Text(
+                "Cameron Williamson",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
 
-            SizedBox(height: 20.h),
+              SizedBox(height: 4.h),
 
-            /// SOCIAL MEDIA
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _socialIcon(Icons.facebook),
-                _socialIcon(Icons.alternate_email),
-                _socialIcon(Icons.send),
-                _socialIcon(Icons.business),
-              ],
-            ),
+              /// BLOOD GROUP
+              const Text("A+ Blood", style: TextStyle(color: Colors.grey)),
 
-            SizedBox(height: 20.h),
-          ],
+              SizedBox(height: 16.h),
+
+              /// CHAT & CALL BUTTONS
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _actionButton(
+                    text: "Chat Now",
+                    color: Colors.red,
+                    onTap: () {},
+                  ),
+                  SizedBox(width: 12.w),
+                  _outlineButton(text: "Call", onTap: () {}),
+                ],
+              ),
+
+              SizedBox(height: 20.h),
+
+              /// TAB BAR
+              const TabBar(
+                indicatorColor: Colors.red,
+                indicatorWeight: 2,
+                labelColor: Colors.red,
+                unselectedLabelColor: Colors.grey,
+                tabs: [
+                  Tab(text: "About"),
+                  Tab(text: "Create Ads"),
+                ],
+              ),
+
+              SizedBox(height: 16.h),
+
+              /// TAB CONTENT
+              SizedBox(
+                height: 420.h,
+                child: TabBarView(
+                  children: [
+                    /// ABOUT TAB
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _infoCard(),
+                        SizedBox(height: 16.h),
+
+                        Text(
+                          "About User",
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                        SizedBox(height: 8.h),
+
+                        const Text(
+                          "Libero tempore, cum soluta nobis est eligendi optio "
+                          "cumque nihil impedit quo minus id quod maxime placeat "
+                          "facere possimus.",
+                          style: TextStyle(color: Colors.grey),
+                        ),
+
+                        SizedBox(height: 20.h),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _socialIcon(Icons.facebook),
+                            _socialIcon(Icons.alternate_email),
+                            _socialIcon(Icons.send),
+                            _socialIcon(Icons.business),
+                          ],
+                        ),
+                      ],
+                    ),
+
+                    /// CREATE ADS TAB
+                    Center(
+                      child: Text(
+                        "No Ads Created",
+                        style: TextStyle(fontSize: 16.sp),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 20.h),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  /// BUTTONS
+  /// RED BUTTON
   static Widget _actionButton({
     required String text,
     required Color color,
@@ -137,6 +160,7 @@ class ProfileDetailsScreen extends StatelessWidget {
     );
   }
 
+  /// OUTLINE BUTTON
   static Widget _outlineButton({
     required String text,
     required VoidCallback onTap,
@@ -155,32 +179,10 @@ class ProfileDetailsScreen extends StatelessWidget {
     );
   }
 
-  /// TAB ITEM
-  static Widget _tabItem({required String title, required bool isSelected}) {
-    return Column(
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: isSelected ? Colors.red : Colors.grey,
-          ),
-        ),
-        if (isSelected)
-          Container(
-            margin: const EdgeInsets.only(top: 4),
-            height: 2,
-            width: 40,
-            color: Colors.red,
-          ),
-      ],
-    );
-  }
-
   /// INFO CARD
   static Widget _infoCard() {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),

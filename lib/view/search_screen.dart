@@ -112,8 +112,8 @@ class _SearchScreenState extends State<SearchScreen> {
                 child: Dropdownheader(name: 'Recent Blood Request'),
               ),
             ),
-            homeContainer(bloodGroups: bloodGroups),
-            homeContainer(bloodGroups: bloodGroups),
+            // homeContainer(bloodGroups: bloodGroups),
+            // homeContainer(bloodGroups: bloodGroups),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(

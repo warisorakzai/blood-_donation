@@ -1,6 +1,7 @@
 import 'package:blood_donation/Provider/auth_provider.dart';
 import 'package:blood_donation/Provider/bloodRequest_provider.dart';
 import 'package:blood_donation/Provider/storage_provider.dart';
+import 'package:blood_donation/Provider/userPost_provider.dart';
 import 'package:blood_donation/Provider/user_provider.dart';
 
 import 'package:blood_donation/view/auth_wrappper.dart';
@@ -25,6 +26,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => StorageProvider()),
         ChangeNotifierProvider(create: (_) => BloodrequestProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => UserPostsProvider()),
       ],
       child: ScreenUtilInit(
         designSize: Size(375, 812),

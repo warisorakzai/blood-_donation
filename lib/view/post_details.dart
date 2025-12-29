@@ -1,9 +1,27 @@
+import 'package:blood_donation/Models/bloodrequest_model.dart';
+import 'package:blood_donation/Provider/user_provider.dart';
 import 'package:blood_donation/view/profiledetails_screens/profile_details_scrren.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 
-class PostDetailsScreen extends StatelessWidget {
-  const PostDetailsScreen({super.key});
+class PostDetailsScreen extends StatefulWidget {
+  final BloodRequestModel request;
+
+  const PostDetailsScreen({super.key, required this.request});
+
+  @override
+  State<PostDetailsScreen> createState() => _PostDetailsScreenState();
+}
+
+class _PostDetailsScreenState extends State<PostDetailsScreen> {
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context.read<UserProvider>().loadUserById(widget.request.userId);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,112 +34,138 @@ class PostDetailsScreen extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /// Blood Icon
-            Center(
-              child: CircleAvatar(
-                radius: 35,
-                backgroundColor: Colors.red.withOpacity(0.1),
-                child: Icon(Icons.bloodtype, color: Colors.red, size: 40),
-              ),
-            ),
+      body: Consumer<UserProvider>(
+        builder: (BuildContext context, UserProvider provider, Widget? child) {
+          if (provider.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final user = provider.postUser;
+          if (user == null) {
+            return const Center(child: Text('User not found'));
+          }
 
-            const SizedBox(height: 12),
-
-            /// Title
-            Center(
-              child: Text(
-                'Emergency B+ Blood Needed',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            /// Info Card
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileDetailsScreen(),
-                  ),
-                );
-              },
-
-              child: Container(
-                padding: EdgeInsets.all(16.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(color: Colors.black12, blurRadius: 6.sp),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    infoRow(Icons.person, 'Contact Person', 'Person Name'),
-                    infoRow(Icons.call, 'Mobile Number', '+88 011122233344'),
-                    infoRow(Icons.bloodtype, 'How many Bag(s)', '3 Bags'),
-                    infoRow(Icons.public, 'Country', 'Bangladesh'),
-                    infoRow(Icons.location_city, 'City', 'Dhaka'),
-                    infoRow(Icons.local_hospital, 'Hospital', 'Nur Hospital'),
-                  ],
-                ),
-              ),
-            ),
-
-            SizedBox(height: 24.h),
-
-            /// Description
-            Text(
-              'Why do you need blood?',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              'sunt in culpa qui officia deserunt mollitia animi, '
-              'id est laborum et dolorum fuga. Et harum quidem rerum '
-              'facilis expedita',
-              style: TextStyle(color: Colors.grey[700]),
-            ),
-
-            const SizedBox(height: 20),
-
-            /// Message Box
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                'If you interest to donate blood please contact with '
-                'Person Name. View Profile',
-                style: TextStyle(fontSize: 13),
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            /// Tags
-            Wrap(
-              spacing: 8,
+          final request = widget.request;
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                tagChip('#Baby'),
-                tagChip('#Oldman'),
-                tagChip('#Urgents'),
+                /// Blood Icon
+                Center(
+                  child: CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.red.withOpacity(0.1),
+                    child: Icon(Icons.bloodtype, color: Colors.red, size: 40),
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                /// Title
+                Center(
+                  child: Text(
+                    request.title,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                /// Info Card
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            ProfileDetailsScreen(userId: request.userId),
+                      ),
+                    );
+                  },
+
+                  child: Container(
+                    padding: EdgeInsets.all(16.h),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black12, blurRadius: 6.sp),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        infoRow(
+                          Icons.person,
+                          'Contact Person',
+                          request.contactName,
+                        ),
+                        infoRow(Icons.call, 'Mobile Number', request.phone),
+                        infoRow(
+                          Icons.bloodtype,
+                          'How many Bag(s)',
+                          request.bags.toString(),
+                        ),
+                        infoRow(Icons.public, 'Country', request.country),
+                        infoRow(Icons.location_city, 'City', request.city),
+                        infoRow(
+                          Icons.local_hospital,
+                          'Hospital',
+                          request.hospital,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 24.h),
+
+                /// Description
+                Text(
+                  'Why do you need blood?',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                ),
+
+                const SizedBox(height: 8),
+
+                Text(
+                  'sunt in culpa qui officia deserunt mollitia animi, '
+                  'id est laborum et dolorum fuga. Et harum quidem rerum '
+                  'facilis expedita',
+                  style: TextStyle(color: Colors.grey[700]),
+                ),
+
+                const SizedBox(height: 20),
+
+                /// Message Box
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    'If you interest to donate blood please contact with '
+                    'Person Name. View Profile',
+                    style: TextStyle(fontSize: 13),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
+
+                /// Tags
+                Wrap(
+                  spacing: 8,
+                  children: [
+                    tagChip('#Baby'),
+                    tagChip('#Oldman'),
+                    tagChip('#Urgents'),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

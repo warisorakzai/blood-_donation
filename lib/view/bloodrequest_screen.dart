@@ -1,7 +1,10 @@
+import 'package:blood_donation/Models/bloodrequest_model.dart';
+import 'package:blood_donation/Provider/bloodRequest_provider.dart';
 import 'package:blood_donation/view/HomeScreens/home_screen.dart';
 import 'package:blood_donation/view/post_details.dart';
 import 'package:blood_donation/widgets/dropdownheader.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BloodrequestScreen extends StatefulWidget {
   const BloodrequestScreen({super.key});
@@ -34,28 +37,49 @@ class _BloodrequestScreenState extends State<BloodrequestScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 23),
             child: Dropdownheader(name: 'Blood Request'),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 3,
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => PostDetailsScreen(),
-                      ),
-                    );
-                  },
-                  child: homeContainer(
-                    bloodGroup: '',
-                    title: '',
-                    hospital: '',
-                    date: '',
-                  ),
-                );
-              },
-            ),
+          Consumer<BloodrequestProvider>(
+            builder: (context, provider, _) {
+              return StreamBuilder<List<BloodRequestModel>>(
+                stream: provider.requests,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(child: Text("No requests found"));
+                  }
+                  final requests = snapshot.data!;
+
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: requests.length,
+                    itemBuilder: (context, index) {
+                      final req = requests[index];
+                      return InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PostDetailsScreen(request: req),
+                            ),
+                          );
+                        },
+                        child: homeContainer(
+                          bloodGroup: req.bloodGroup,
+                          title: req.title,
+                          hospital: req.hospital,
+                          date: req.createdAt.toLocal().toString().split(
+                            ' ',
+                          )[0],
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            },
           ),
         ],
       ),

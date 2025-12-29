@@ -10,7 +10,8 @@ class UserProvider extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   UserModel? _user;
-
+  UserModel? _postUser;
+  UserModel? get postUser => _postUser;
   String? _error;
   String? get error => _error;
   UserModel? get user => _user;
@@ -97,14 +98,29 @@ class UserProvider extends ChangeNotifier {
     _user = null;
     notifyListeners();
   }
+
   Future<void> updateProfileImage(String imageUrl) async {
-  final uid = FirebaseAuth.instance.currentUser!.uid;
+    final uid = FirebaseAuth.instance.currentUser!.uid;
 
-  await FirebaseFirestore.instance
-      .collection('users')
-      .doc(uid)
-      .update({'profileImage': imageUrl});
+    await FirebaseFirestore.instance.collection('users').doc(uid).update({
+      'profileImage': imageUrl,
+    });
 
-  await loadCurrentUser();
-}
+    await loadCurrentUser();
+  }
+
+  /// Load user by id (used in PostDetailsScreen)
+  Future<void> loadUserById(String uid) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      _postUser = await _firestoreService.fetchUserById(uid);
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

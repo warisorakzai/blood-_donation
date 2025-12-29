@@ -26,7 +26,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchController = TextEditingController();
-  int selectedIndex = -1;
+  int selectedIndex = 1;
 
   final List<String> bloodGroups = [
     "A+",
@@ -255,10 +255,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
             GridView.builder(
               physics: const NeverScrollableScrollPhysics(),
-
+              itemCount: bloodGroups.length,
               shrinkWrap: true,
               padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 20.h),
-              itemCount: 2,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 4,
                 mainAxisSpacing: 12,
@@ -332,23 +331,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return const Center(child: Text("No requests found"));
                     }
+
                     final requests = snapshot.data!;
+                    final int itemCount = requests.length > 2
+                        ? 2
+                        : requests.length;
 
                     return ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-
-                      shrinkWrap: true,
-                      itemCount: requests.length,
+                      shrinkWrap: true, // ✅ IMPORTANT
+                      physics:
+                          const NeverScrollableScrollPhysics(), // ✅ IMPORTANT
+                      itemCount: itemCount,
                       itemBuilder: (context, index) {
                         final req = requests[index];
 
-                        return homeContainer(
-                          bloodGroup: req.bloodGroup,
-                          title: req.title,
-                          hospital: req.hospital,
-                          date: req.createdAt.toLocal().toString().split(
-                            ' ',
-                          )[0],
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => BloodrequestScreen(),
+                              ),
+                            );
+                          },
+                          child: homeContainer(
+                            bloodGroup: req.bloodGroup,
+                            title: req.title,
+                            hospital: req.hospital,
+                            date: req.createdAt.toLocal().toString().split(
+                              ' ',
+                            )[0],
+                          ),
                         );
                       },
                     );
@@ -356,6 +369,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+
             homeHeader(tilte: 'Our Contribution'),
             GridView.builder(
               physics: const NeverScrollableScrollPhysics(),

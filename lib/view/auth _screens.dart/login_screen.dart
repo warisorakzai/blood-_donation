@@ -1,6 +1,7 @@
 import 'package:blood_donation/Provider/auth_provider.dart';
 import 'package:blood_donation/view/Profile_screen/personel_information.dart';
 import 'package:blood_donation/view/auth%20_screens.dart/signup_screen.dart';
+import 'package:blood_donation/view/auth_wrappper.dart';
 import 'package:blood_donation/widgets/redContainer.dart';
 import 'package:blood_donation/widgets/reusable_button.dart';
 import 'package:blood_donation/widgets/reusable_email.dart';
@@ -80,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             if (context.mounted) {
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
-                                  builder: (_) => PersonelInformation(),
+                                  builder: (_) => AuthWrapper(),
                                 ),
                               );
                             }

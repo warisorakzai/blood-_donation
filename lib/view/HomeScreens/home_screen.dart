@@ -7,6 +7,7 @@ import 'package:blood_donation/Provider/storage_provider.dart';
 import 'package:blood_donation/Provider/user_provider.dart';
 import 'package:blood_donation/view/auth%20_screens.dart/login_screen.dart';
 import 'package:blood_donation/view/bloodrequest_screen.dart';
+import 'package:blood_donation/view/specific_Bloodgroup_screen.dart';
 import 'package:blood_donation/widgets/contribution.dart';
 import 'package:blood_donation/widgets/custom_text_field.dart';
 import 'package:blood_donation/widgets/image_picker.dart';
@@ -278,7 +279,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BloodrequestScreen(),
+                          builder: (context) => SpecificBloodgroupScreen(
+                            bloodGroup: bloodGroups[index],
+                          ),
                         ),
                       );
                     },

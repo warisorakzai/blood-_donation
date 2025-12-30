@@ -8,6 +8,7 @@ class UserProvider extends ChangeNotifier {
   final UserFirestoreService _firestoreService = UserFirestoreService();
 
   bool _isLoading = false;
+  bool isWilling = false;
   bool get isLoading => _isLoading;
   UserModel? _user;
   UserModel? _postUser;
@@ -122,5 +123,19 @@ class UserProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> toggleWilling(bool value) async {
+    isWilling = value;
+    if (value) {
+      _isLoading = true;
+      notifyListeners();
+
+      _user = await _firestoreService.fetchCurrentUser();
+      _isLoading = false;
+    } else {
+      _user = null;
+    }
+    notifyListeners();
   }
 }

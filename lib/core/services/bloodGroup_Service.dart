@@ -8,7 +8,10 @@ class BloodgroupService {
   Stream<List<BloodRequestModel>> getPostsByBloodGroup(String bloodGroup) {
     return _firestore
         .collection('Blood_request')
-        .where('bloodGroup', isEqualTo: bloodGroup)
+        .where(
+          'bloodGroup',
+          isEqualTo: bloodGroup,
+        ) //.where used for the Filtration
         .snapshots()
         .map(
           (snapshot) => snapshot.docs

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   final String uid;
   final String email;
@@ -66,7 +68,7 @@ class UserModel {
       'isDonor': isDonor,
       'profileCompleted': profileCompleted,
       'profileImage': profileImage,
-      'createdAt': createdAt.toIso8601String(),
+      'createdAt': FieldValue.serverTimestamp(),
     };
   }
 

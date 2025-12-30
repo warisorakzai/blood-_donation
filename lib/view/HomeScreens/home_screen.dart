@@ -147,7 +147,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           },
                     ),
-                    Text('Donate Blood : off', style: TextStyle(fontSize: 10)),
+                    Consumer<UserProvider>(
+                      builder:
+                          (
+                            BuildContext context,
+                            UserProvider provider,
+                            Widget? child,
+                          ) {
+                            return Text(
+                              provider.isWilling
+                                  ? 'Donate Blood : On'
+                                  : 'Donate Blood : OFF',
+                              style: TextStyle(fontSize: 10),
+                            );
+                          },
+                    ),
                   ],
                 ),
                 SizedBox(width: 120.w),
@@ -189,36 +203,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 hintText: 'Search blood',
               ),
             ),
-            Consumer<BloodrequestProvider>(
-              builder: (context, provider, _) {
-                return StreamBuilder(
-                  stream: provider.requests,
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const CircularProgressIndicator();
-                    }
+            // Consumer<BloodrequestProvider>(
+            //   builder: (context, provider, _) {
+            //     return StreamBuilder(
+            //       stream: provider.requests,
+            //       builder: (context, snapshot) {
+            //         if (!snapshot.hasData) {
+            //           return const CircularProgressIndicator();
+            //         }
 
-                    final requests = snapshot.data!;
+            //         final requests = snapshot.data!;
 
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: requests.length,
-                      itemBuilder: (context, index) {
-                        final req = requests[index];
+            //         return ListView.builder(
+            //           shrinkWrap: true,
+            //           itemCount: requests.length,
+            //           itemBuilder: (context, index) {
+            //             final req = requests[index];
 
-                        return Card(
-                          child: ListTile(
-                            title: Text(req.title),
-                            subtitle: Text("${req.bloodGroup} • ${req.city}"),
-                            trailing: Text("${req.bags} Bags"),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                );
-              },
-            ),
+            //             return Card(
+            //               child: ListTile(
+            //                 title: Text(req.title),
+            //                 subtitle: Text("${req.bloodGroup} • ${req.city}"),
+            //                 trailing: Text("${req.bags} Bags"),
+            //               ),
+            //             );
+            //           },
+            //         );
+            //       },
+            //     );
+            //   },
+            // ),
             homeHeader(tilte: 'Activity As'),
 
             GridView.count(
@@ -341,9 +355,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         : requests.length;
 
                     return ListView.builder(
-                      shrinkWrap: true, // ✅ IMPORTANT
-                      physics:
-                          const NeverScrollableScrollPhysics(), // ✅ IMPORTANT
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: itemCount,
                       itemBuilder: (context, index) {
                         final req = requests[index];

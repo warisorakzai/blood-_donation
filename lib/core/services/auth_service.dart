@@ -1,4 +1,3 @@
-import 'package:blood_donation/Models/bloodrequest_model.dart';
 import 'package:blood_donation/Models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,6 +18,7 @@ class AuthService {
       uid: userCredential.user!.uid,
       email: email,
       createdAt: DateTime.now(),
+    
       profileCompleted: false,
     );
 

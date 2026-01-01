@@ -87,6 +87,11 @@ class UserProvider extends ChangeNotifier {
       notifyListeners();
 
       _user = await _firestoreService.fetchCurrentUser();
+      if (user != null) {
+        isWilling = user!.isDonor;
+        _isLoading = false;
+        notifyListeners();
+      }
     } catch (e) {
       debugPrint('Error loading user: $e');
     } finally {
@@ -125,17 +130,22 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> toggleWilling(bool value) async {
+  Future<void> toggleDonate(bool value) async {
     isWilling = value;
-    if (value) {
-      _isLoading = true;
-      notifyListeners();
+    notifyListeners();
 
+    _isLoading = true;
+    notifyListeners();
+
+    await _firestoreService.updateDonateStatus(value);
+
+    if (value) {
       _user = await _firestoreService.fetchCurrentUser();
-      _isLoading = false;
     } else {
       _user = null;
     }
+
+    _isLoading = false;
     notifyListeners();
   }
 }

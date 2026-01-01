@@ -12,6 +12,14 @@ class UserDonateBlood extends StatefulWidget {
 
 class _UserDonateBloodState extends State<UserDonateBlood> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      Provider.of<UserProvider>(context, listen: false).loadCurrentUser();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Create Donat Blood')),
@@ -42,7 +50,7 @@ class _UserDonateBloodState extends State<UserDonateBlood> {
                         activeColor: Colors.red,
                         value: provider.isWilling,
                         onChanged: (val) {
-                          provider.toggleWilling(val);
+                          provider.toggleDonate(val);
                         },
                       ),
                     ],
@@ -52,7 +60,7 @@ class _UserDonateBloodState extends State<UserDonateBlood> {
 
                 if (provider.isLoading) CircularProgressIndicator(),
 
-                if (provider.user != null)
+                if (provider.isWilling && provider.user != null)
                   Column(
                     children: [
                       userTile('Name', provider.user!.name.toString()),

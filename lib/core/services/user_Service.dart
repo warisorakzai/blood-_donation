@@ -53,4 +53,12 @@ class UserFirestoreService {
 
     return UserModel.fromMap(doc.data()!);
   }
+
+  Future<void> updateDonateStatus(bool isDonor) async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+
+    await _firestore.collection('users').doc(uid).update({
+      'isDonor': isDonor,
+    });
+  }
 }

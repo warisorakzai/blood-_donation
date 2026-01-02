@@ -12,4 +12,6 @@ class AmbulanceProvider with ChangeNotifier {
     isLoading = false;
     notifyListeners();
   }
+
+  Stream<List<AmbulanceModel>> get ambulanceRequest => _service.getAmbulances();
 }

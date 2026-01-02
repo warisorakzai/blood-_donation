@@ -73,9 +73,11 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
+    final Timestamp? timestamp = map['createdAt'];
+
     return UserModel(
-      uid: map['uid'],
-      email: map['email'],
+      uid: map['uid'] ?? '',
+      email: map['email'] ?? '',
       name: map['name'],
       phone: map['phone'],
       city: map['city'],
@@ -84,7 +86,7 @@ class UserModel {
       isDonor: map['isDonor'] ?? false,
       profileCompleted: map['profileCompleted'] ?? false,
       profileImage: map['profileImage'],
-      createdAt: DateTime.parse(map['createdAt']),
+      createdAt: timestamp?.toDate() ?? DateTime.now(),
     );
   }
 }

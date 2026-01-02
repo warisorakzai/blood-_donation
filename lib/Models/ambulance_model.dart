@@ -19,6 +19,27 @@ class AmbulanceModel {
     this.createdAt,
   });
 
+  /// 🔁 COPY WITH
+  AmbulanceModel copyWith({
+    String? id,
+    String? ambulanceName,
+    String? hospitalName,
+    String? address,
+    String? imageUrl,
+    String? phoneNumber,
+    DateTime? createdAt,
+  }) {
+    return AmbulanceModel(
+      id: id ?? this.id,
+      ambulanceName: ambulanceName ?? this.ambulanceName,
+      hospitalName: hospitalName ?? this.hospitalName,
+      address: address ?? this.address,
+      imageUrl: imageUrl ?? this.imageUrl,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
   /// SAVE TO FIRESTORE
   Map<String, dynamic> toMap() {
     return {
@@ -31,6 +52,7 @@ class AmbulanceModel {
     };
   }
 
+  /// READ FROM FIRESTORE
   factory AmbulanceModel.fromMap(String id, Map<String, dynamic> map) {
     final Timestamp? timestamp = map['createdAt'];
 
@@ -41,7 +63,7 @@ class AmbulanceModel {
       address: map['address'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
-      createdAt: timestamp?.toDate() ?? DateTime.now(),
+      createdAt: timestamp?.toDate(),
     );
   }
 }

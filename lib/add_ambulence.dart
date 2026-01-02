@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:blood_donation/Models/ambulance_model.dart';
 import 'package:blood_donation/Models/organization_model.dart';
 import 'package:blood_donation/Provider/ambulance_provider.dart';
+import 'package:blood_donation/Provider/ambulance_storage_provider.dart';
 import 'package:blood_donation/Provider/organization_provider.dart';
 import 'package:blood_donation/Provider/organization_storage_provider.dart';
 import 'package:blood_donation/widgets/image_picker.dart';
@@ -119,8 +120,9 @@ class _AddOrganizationScreenState extends State<AddAmbulence> {
             const SizedBox(height: 20),
 
             /// SAVE BUTTON
-            Consumer<AmbulanceProvider>(
-              builder: (context, ambulance, _) {
+            Consumer2<AmbulanceProvider,AmbulanceStorageProvider>(
+
+              builder: (context, ambulance,storage, _) {
                 return ElevatedButton(
                   onPressed: ambulance.isLoading
                       ? null
@@ -143,12 +145,9 @@ class _AddOrganizationScreenState extends State<AddAmbulence> {
                           await ambulance.addAmbulance(org);
 
                           //  Upload image (if selected)
-                          // if (selectedImage != null) {
-                          //   await storageProvider.uploadImage(
-                          //     org.id,
-                          //     selectedImage!,
-                          //   );
-                          // }
+                          if (selectedImage != null) {
+                            await storage.uploadImage(org.id, selectedImage!);
+                          }
 
                           Navigator.pop(context);
                         },

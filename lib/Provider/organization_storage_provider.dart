@@ -6,10 +6,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class OrganizationStorageProvider with ChangeNotifier {
-  final _service = OrganizationstorageService();
-  bool isLoading = false;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  OrganizationModel? organization;
+    final _service = OrganizationstorageService();
+    bool isLoading = false;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    OrganizationModel? organization;
 
   Future<bool> uploadImage(String uid, File image) async {
     isLoading = true;

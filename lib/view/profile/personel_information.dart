@@ -63,7 +63,7 @@ class _PersonelInformationState extends State<PersonelInformation> {
   Widget build(BuildContext context) {
     // final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final authProvider = context.read<AuthProviders>();
+    // final authProvider = context.read<AuthProviders>();
 
     return Scaffold(
       appBar: AppBar(
@@ -73,8 +73,8 @@ class _PersonelInformationState extends State<PersonelInformation> {
             return InkWell(
               onTap: auth.isLoading
                   ? null
-                  : () async{
-                                  await FirebaseAuth.instance.signOut();
+                  : () async {
+                      await FirebaseAuth.instance.signOut();
 
                       if (context.mounted) {
                         Navigator.pushReplacement(
@@ -209,7 +209,7 @@ class _PersonelInformationState extends State<PersonelInformation> {
                     items: getCityList(),
                     itemToString: (item) => item,
                     hintText: 'Enter Your City',
-                     onChanged: (val) {
+                    onChanged: (val) {
                       setState(() {
                         selectedCity = val;
                       });

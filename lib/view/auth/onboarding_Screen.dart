@@ -31,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   ];
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
+    // final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Column(
